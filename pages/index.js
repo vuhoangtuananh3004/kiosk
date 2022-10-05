@@ -1,9 +1,17 @@
-import Header from "./components/Header/Header";
+import React from "react";
+import MainSection from "../components/View/MainSection"
+import { Provider } from "react-redux";
+import store from "../Store/store"
+function index() {
 
-export default function Home() {
+
   return (
     <div>
-      <Header/>
+      <Provider store={store}>
+        <MainSection/>
+      </Provider>
     </div>
   )
 }
+
+export default index
