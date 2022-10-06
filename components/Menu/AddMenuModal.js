@@ -3,15 +3,23 @@ import AddMenuContext from '../Context/AddMenuContext'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useDispatch } from 'react-redux';
 import { checkMenuAvaible } from '../../features/hotel/menuSlice';
+
+const DELETE = 'DELETE'
+const ADD = 'ADD'
+
 function AddMenuModal() {
   const { setModal, menuDoc } = useContext(AddMenuContext);
   const [disabledAddBtn, setDisableAddBtn] = useState(true);
   const [disabledDeleteBtn, setDisableDeleteBtn] = useState(true);
+  const [confirm, setConfirm] = useState(false)
+  const [getMenuTitle, setMenuTitle] = useState('')
   const cancel = () => {
     setModal(false)
+    setConfirm(false)
   }
   const menuTitle = (e) => {
     let temp = e.target.value.replace(/[^A-Z0-9]+/ig, '')
+    setMenuTitle(temp.toUpperCase())
     const found = menuDoc.data.some(element => element.name.toLowerCase() === temp.toLowerCase())
     if (e.target.value === '') {
       setDisableAddBtn(true)
@@ -27,7 +35,10 @@ function AddMenuModal() {
     }
     console.log(disabledAddBtn);
   }
-  
+  const editTab = (e) => {
+    console.log(e.target.value);
+    setConfirm(true)
+  }
   return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
@@ -47,20 +58,29 @@ function AddMenuModal() {
                   <div className="flex flex-row mt-2 justify-center align-center items-center">
                     {/* <p className="text-sm text-gray-500">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p> */}
                     <span className='mr-4'>Menu Title: </span>
-                    <input className='outline rounded-full p-1 w-[300px] text-center mr-5' type='text' id='menuTitle' placeholder='Type your new/delete menu-title' onKeyUp={menuTitle} />
+                    {(confirm) ? <span>{getMenuTitle}</span> :
+                      <input className='outline rounded-full p-1 w-[300px] text-center mr-5' type='text' id='menuTitle' placeholder='Type your new/delete menu-title' onKeyUp={menuTitle} />
+                    }
                     {
                       (disabledAddBtn && disabledDeleteBtn) ? <></> :
-                      (disabledAddBtn) ? <span className='font-bold text-md text-red-900'> Menu is existed</span> : <span className='font-bold text-md text-green-900'> Menu is available</span>
+                      (confirm) ? <></> :
+                        (disabledAddBtn) ? <span className='font-bold text-md text-red-900'> Menu is existed</span> : <span className='font-bold text-md text-green-900'> Menu is available</span>
                     }
                   </div>
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <button type="button" className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled" onClick={cancel} >Cancel</button>
-              <button type="button" className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" disabled={disabledDeleteBtn} >Delete</button>
-              <button type="button" className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-greed-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" disabled={disabledAddBtn} >Add</button>
-            </div>
+            {
+              (!confirm) ? <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <button type="button" className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled" onClick={cancel} >Cancel</button>
+                <button type="button" className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" disabled={disabledDeleteBtn} value={DELETE} onClick={editTab}>Delete</button>
+                <button type="button" className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-greed-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" disabled={disabledAddBtn} value={ADD} onClick={editTab}>Add</button>
+              </div> : <div className="flex bg-gray-50 px-4 py-3 justify-center sm:px-6">
+                <button type="button" className="inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-greed-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" >Confirm</button>
+                <button type="button" className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled" onClick={cancel} >Cancel</button>
+              </div>
+            }
+
 
           </div>
         </div>
