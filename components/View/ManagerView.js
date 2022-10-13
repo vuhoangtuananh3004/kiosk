@@ -8,12 +8,11 @@ import MenuView from './MenuView'
 
 function ManagerView() {
   const requestMenu = useSelector(state => state.menu.requestMenu)
-  console.log(requestMenu)
   return (
     <div>
       <MenuBar/>
       {
-        (requestMenu) ? <MenuView name={requestMenu}/> : <></>
+        (requestMenu) ? <MenuView key={requestMenu} name={requestMenu}/> : <></>
       }
     </div>
   )

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { menuDocs } from '../../features/hotel/menuSlice'
+import { menuDocs, reload } from '../../features/hotel/menuSlice'
 import { getMenu } from '../../features/firebaseFunction'
 import MenuCard from './MenuCard';
 import AddIcon from '@mui/icons-material/Add';
 import AddMenuModal from './AddMenuModal';
 import AddMenuContext from '../Context/AddMenuContext';
+import { onSnapshot, query, collection } from "firebase/firestore";
+import db from '../../firebaseConfig'
+
 
 function MenuBar() {
     const dispatch = useDispatch();
@@ -13,17 +16,22 @@ function MenuBar() {
     const menuDoc = useSelector(state => state.menu.menuDoc)
 
     useEffect(() => {
+        const q = query(collection(db, "menu"));
+        const realTimeUpDateMenu = onSnapshot(q, (querySnapshot) => {
+            dispatch(reload())
+        });
+    }, [])
+
+    useEffect(() => {
         if (menuDoc.isLoading) {
             (async () => {
                 await getMenu().then(data => {
-                    console.log(data);
                     dispatch(menuDocs(data))
                 })
-
             })();
-            console.log("loading.....")
         }
     }, [menuDoc.isLoading])
+
 
     const addMenu = () => {
         setModal(true)
@@ -44,9 +52,6 @@ function MenuBar() {
                         </AddMenuContext.Provider>
                     </div>
             }
-
-
-
         </div>
     )
 }

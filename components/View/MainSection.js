@@ -16,19 +16,6 @@ function MainSection() {
     const [view, setView] = useState('View');
     const dispatch = useDispatch();
 
-    const [value, loading, error] = useCollection(
-        collection(db, 'cities'),
-        {
-            snapshotListenOptions: { includeMetadataChanges: true },
-        }
-    );
-    const [menuDoc, loadingMenu, loadingMenuError] = useCollection(
-        collection(db,'menu'),
-        {
-            snapshotListenOptions: { includeMetadataChanges: true },
-        }
-    )
-
     // useEffect(() => {
     //     if (loading) {
     //         console.log(loading)
@@ -39,7 +26,6 @@ function MainSection() {
 
     return (
         <div>
-            {(loading) ? <></> : <>
                 <FullScreen handle={handle} className='bg-white'>
                     <ViewContext.Provider value={{ view, setView }}>
                         <Header />
@@ -54,7 +40,6 @@ function MainSection() {
                         }
                     </ViewContext.Provider>
                 </FullScreen>
-            </>}
         </div>
     )
 }

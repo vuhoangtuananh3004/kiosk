@@ -1,4 +1,3 @@
-import { async } from '@firebase/util';
 import { createSlice } from '@reduxjs/toolkit'
 
 
@@ -40,19 +39,18 @@ export const menuSlice = createSlice({
         addItemModel: (state, action) => {
 
         },
-        checkMenuAvaible: (state, action) =>{
- 
-            
-        },
         setRequestMenu: (state, action) =>{
             console.log(action.payload);
             state.requestMenu = action.payload
+        },
+        reload: (state, action) =>{
+            state.menuDoc.isLoading = true;
         }
         
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { addItemModel, checkMenuAvaible, setRequestMenu, menuDocs } = menuSlice.actions
+export const { addItemModel, setRequestMenu, menuDocs, reload } = menuSlice.actions
 
 export default menuSlice.reducer
