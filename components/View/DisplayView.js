@@ -6,16 +6,6 @@ import { getFirestore, collection } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 function DisplayView() {
-  // const temp = useSelector(state => state.loadData.hotelItems)
-
-
-  // const fecthData = async () => {
-  //   await getCities().then(data => {
-  //     dispatch(getData(data))
-  //   })
-  // }
-
-
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {setRequestMenu} from '../../features/hotel/menuSlice'
+import {reloadModel} from '../../features/model/itemModelSlice'
 
 function MenuCard(props) {
     const dispatch = useDispatch();

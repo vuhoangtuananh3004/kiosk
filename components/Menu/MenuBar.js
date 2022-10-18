@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { menuDocs, reload } from '../../features/hotel/menuSlice'
+import { menuDocs, reloadMenu } from '../../features/hotel/menuSlice'
 import { getMenu } from '../../features/firebaseFunction'
 import MenuCard from './MenuCard';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,7 +18,7 @@ function MenuBar() {
     useEffect(() => {
         const q = query(collection(db, "menu"));
         const realTimeUpDateMenu = onSnapshot(q, (querySnapshot) => {
-            dispatch(reload())
+            dispatch(reloadMenu())
         });
     }, [])
 

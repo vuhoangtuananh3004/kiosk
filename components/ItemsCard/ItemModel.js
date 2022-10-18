@@ -1,25 +1,47 @@
-import React, { useState } from 'react'
-import AddIcon from '@mui/icons-material/Add';
+import React, { useEffect, useState } from 'react'
+import StorageSharpIcon from '@mui/icons-material/StorageSharp';
 import AddModel from './AddModel';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {addModelToDatabase, loadModel} from '../../features/model/itemModelSlice'
+import { loadModelData } from '../../features/firebaseFunction';
+
+const initialState = {
+    models: {
+        data: [],
+        isLoading: true,
+    }
+}
 function ItemModel(props) {
     const dispatch = useDispatch();
+    const models = useSelector(state => state.model.models)
     const [settingMode, setMode] = useState(false);
-    // dispatch(loadModel())
     const turnOnSetting = () => {
         setMode(true)
     }
     const done = () => {
         setMode(false)
-        dispatch(loadModel())
         dispatch(addModelToDatabase(props.name))
     }
+
+    useEffect(() => {
+        console.log("reload");
+        if (models.isLoading) {
+            (async () => {
+                await loadModelData(props.name).then(data => {
+                    if (data.length != 0){
+                        dispatch(loadModel(data[0].model))
+                    }else{
+                        dispatch(loadModel(initialState.models))
+                    }
+                })
+            })();
+        }
+  
+    }, [models.isLoading])
     return (
         <div className='flex w-[200px] h-[200px] border border-dashed border-slate-900 rounded-[30px] justify-center items-center text-[100px] hover:bg-green-800/20 cursor-pointer'>
             {
-                (!settingMode) ? <AddIcon fontSize='inherit' onClick={turnOnSetting} /> :
-
+                (!settingMode) ? <StorageSharpIcon fontSize='inherit' onClick={turnOnSetting} /> :
                     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
                         <div className="fixed inset-0 z-10 overflow-y-auto">

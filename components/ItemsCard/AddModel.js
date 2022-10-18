@@ -45,7 +45,6 @@ function AddModel() {
             })
         } else {
             let temp = ingredients.toppings.find(o => o.name === topping.name)
-            console.log(temp);
             if (!temp) {
                 setIngredients({
                     ...ingredients,

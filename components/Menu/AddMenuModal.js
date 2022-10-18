@@ -3,7 +3,8 @@ import AddMenuContext from '../Context/AddMenuContext'
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewDoc, removeDoc } from '../../features/firebaseFunction'
-import { reload } from '../../features/hotel/menuSlice'
+import { reloadMenu } from '../../features/hotel/menuSlice'
+import { reloadModel } from '../../features/model/itemModelSlice'
 const DELETE = 'DELETE'
 const ADD = 'ADD'
 
@@ -52,18 +53,20 @@ function AddMenuModal() {
       case DELETE:
         (async () => {
           await removeDoc('menu', getMenuTitle)
-          dispatch(reload())
+          await removeDoc('models', getMenuTitle)
+          dispatch(reloadMenu())
         })();
         break;
       case ADD:
         (async () => {
           await addNewDoc('menu', getMenuTitle)
-          dispatch(reload())
+          dispatch(reloadMenu())
         })();
         break;
       default:
         break;
     }
+    dispatch(reloadModel())
     cancel()
 
   }

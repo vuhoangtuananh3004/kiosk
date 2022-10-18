@@ -18,19 +18,6 @@ export const menuSlice = createSlice({
     requestMenu: null,
     menuAvailable: false,
     reducers: {
-        // getData: (state, action) => {
-        //     state.hotelItems = action.payload
-        //     state.isLoading = false;
-        // }
-        // ,
-        // menuDocs: (state, action) => {
-        //    state.menuDoc.data = action.payload;
-        //    state.menuDoc.isLoading = false;
-        //    console.log(state.menuDoc.data);
-        // },
-        // requestMenu: (state, action) =>{
-
-        // }
         menuDocs: (state, action) => {
             state.menuDoc.data = action.payload;
             state.temp = state.menuDoc.data
@@ -40,10 +27,9 @@ export const menuSlice = createSlice({
 
         },
         setRequestMenu: (state, action) =>{
-            console.log(action.payload);
             state.requestMenu = action.payload
         },
-        reload: (state, action) =>{
+        reloadMenu: (state, action) =>{
             state.menuDoc.isLoading = true;
         }
         
@@ -51,6 +37,6 @@ export const menuSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addItemModel, setRequestMenu, menuDocs, reload } = menuSlice.actions
+export const { addItemModel, setRequestMenu, menuDocs, reloadMenu } = menuSlice.actions
 
 export default menuSlice.reducer

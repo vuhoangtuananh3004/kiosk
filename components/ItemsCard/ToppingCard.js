@@ -6,6 +6,7 @@ import { upgradeIngredient, editModel } from '../../features/model/itemModelSlic
 function ToppingCard(props) {
     const models = useSelector(state => state.model.models)
     const dispatch = useDispatch();
+    
     const checkIngredientTitleExist = (ingredientsName) => {
         if (models.data.length > 0) {
             let checkModelsTitle = models.data.find(o => o.name === ingredientsName)
