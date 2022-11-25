@@ -1,13 +1,22 @@
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ItemBox from '../CustomerView/ItemBox'
-import { SignalWifiStatusbarConnectedNoInternet4Sharp } from '@mui/icons-material';
 import db from '../../firebaseConfig'
-import { jsonEval } from '@firebase/util';
 
 function OrderView() {
-  addItemsFromDatabase()
+  const [menu, setMenu] = useState([])
+  async function addItemsFromDatabase() {
+    const querySnapshot = await getDocs(collection(db, "menu"));
+    const menus = [];
+    querySnapshot.forEach(doc => {
+      menus.push(doc.data());
+    });
+    setMenu(menus)
+  }
+  useEffect(() => {
+    addItemsFromDatabase()
+  }, [])
   return (
     <div>
       <div className="flex justify-center p-5">
@@ -16,20 +25,19 @@ function OrderView() {
         </button>
       </div>
       <div className="flex flex-wrap justify-center">
+        {menu.map((item) => (
+          <div className="relative p-5 m-5 h-96 w-96 shadow-2xl bg-gray-100" key={item.id}>
+            <div className="text-2xl font-bold">{item.name}</div>
+            <img src="https://media.istockphoto.com/photos/hamburger-with-cheese-and-french-fries-picture-id1188412964?k=20&m=1188412964&s=612x612&w=0&h=Ow-uMeygg90_1sxoCz-vh60SQDssmjP06uGXcZ2MzPY="></img>
+            <div>Juicy cheeseburger with a side of pickles</div>
+            <div className="flex justify-center">
+              <button className="bg-blue-300 p-2 hover:bg-gray-300 duration-200">Add to order</button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
 }
-
-async function addItemsFromDatabase(){
-  const querySnapshot = await getDocs(collection(db,"menu"));
-  var menus = [];
-  querySnapshot.forEach(doc =>{
-    menus.push(doc.data());
-  });
-  console.log(menus);
-}
-
-
 
 export default OrderView
